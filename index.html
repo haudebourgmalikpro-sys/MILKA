@@ -245,26 +245,64 @@
       });
     });
 
-    let player;
+    let player; let ytReady = false; let pendingPlay = false;
+    const musicBtn = document.getElementById('musicBtn');
+    const ytIframe = document.getElementById('ytbg');
+    musicBtn.addEventListener('click', () => {
+      if (!ytReady || !player) {
+        pendingPlay = true;
+        try {
+          const url = new URL(ytIframe.src);
+          url.searchParams.set('autoplay', '1');
+          url.searchParams.set('mute', '0');
+          url.searchParams.set('origin', window.location.origin);
+          ytIframe.src = url.toString();
+        } catch(e) {}
+        musicBtn.textContent = 'Musique: On (chargement)';
+        musicBtn.setAttribute('aria-pressed', 'true');
+        return;
+      }
+      const state = player.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+        musicBtn.textContent = 'Musique: Off';
+        musicBtn.setAttribute('aria-pressed', 'false');
+      } else {
+        try { player.unMute(); } catch(e) {}
+        try { player.setVolume(60); } catch(e) {}
+        player.playVideo();
+        musicBtn.textContent = 'Musique: On';
+        musicBtn.setAttribute('aria-pressed', 'true');
+      }
+    });
+
+    let userRequestedPlay = false;
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('ytbg', {
+        playerVars: {
+          playsinline: 1,
+          loop: 1,
+          playlist: '9Vipv-DZXx4',
+          origin: window.location.origin
+        },
         events: {
           'onReady': () => {
-            const btn = document.getElementById('musicBtn');
-            btn.addEventListener('click', () => {
-              if (!player) return;
-              const state = player.getPlayerState();
-              if (state === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-                btn.textContent = 'Musique: Off';
-                btn.setAttribute('aria-pressed', 'false');
-              } else {
-                player.mute();
-                player.playVideo();
-                btn.textContent = 'Musique: On';
-                btn.setAttribute('aria-pressed', 'true');
-              }
-            });
+            ytReady = true;
+            if (pendingPlay) {
+              try { player.mute(); } catch(e) {}
+              userRequestedPlay = true;
+              player.playVideo();
+              musicBtn.textContent = 'Musique: On';
+              musicBtn.setAttribute('aria-pressed', 'true');
+              pendingPlay = false;
+            }
+          },
+          'onStateChange': (ev) => {
+            if (ev.data === YT.PlayerState.PLAYING && userRequestedPlay) {
+              try { player.unMute(); } catch(e) {}
+              try { player.setVolume(60); } catch(e) {}
+              userRequestedPlay = false;
+            }
           }
         }
       });
