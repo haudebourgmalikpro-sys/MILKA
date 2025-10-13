@@ -1,47 +1,232 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mes réseaux — Lord.milka</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MILKA • Réseaux</title>
+  <meta name="description" content="Tous les réseaux de MILKA" />
+  <meta name="theme-color" content="#9A0002" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
-    body{margin:0;display:flex;min-height:100vh;align-items:center;justify-content:center;background:#0f1724;color:#fff}
-    .card{width:min(720px,92%);text-align:center;padding:36px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));box-shadow:0 6px 30px rgba(2,6,23,0.6)}
-    img.avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,0.06)}
-    h1{margin:12px 0 6px;font-size:20px;letter-spacing:0.6px}
-    p.desc{margin:0 0 18px;opacity:0.85}
-    .links{display:grid;gap:10px;margin-top:8px}
-    .link{display:block;padding:12px 16px;border-radius:10px;text-decoration:none;font-weight:600;background:rgba(255,255,255,0.03);color:inherit;border:1px solid rgba(255,255,255,0.03)}
-    .link:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(2,6,23,0.5);transition:all .12s}
-    .small{margin-top:16px;font-size:13px;opacity:0.7}
-    .icons{display:inline-flex;gap:8px;margin-top:10px}
-    .qr{margin-top:14px;max-width:120px}
+    :root {
+      --cherry: #9A0002;
+      --cream: #EFE6DE;
+      --cherry-700: #7f0002;
+      --cherry-500: #b30707;
+      --cream-800: #d9cfc7;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--cherry);
+      background: radial-gradient(1200px 800px at 20% -10%, rgba(154,0,2,.12), rgba(154,0,2,0)) ,
+                  radial-gradient(1000px 700px at 120% 10%, rgba(154,0,2,.10), rgba(154,0,2,0)) ,
+                  var(--cream);
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+    }
+    .wrap {
+      width: min(680px, 92vw);
+      position: relative;
+      padding: 28px;
+    }
+    .card {
+      background: rgba(255,255,255,0.55);
+      border: 1px solid var(--cream-800);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(154,0,2,0.15);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      overflow: hidden;
+      animation: floatIn .8s ease-out both;
+    }
+    .hero {
+      position: relative;
+      padding: 60px 24px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(154,0,2,.14), rgba(154,0,2,0));
+      border-bottom: 1px dashed var(--cream-800);
+    }
+    .pfp {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid var(--cream);
+      outline: 4px solid var(--cherry);
+      box-shadow: 0 10px 30px rgba(154,0,2,0.28);
+      transform: translateY(10px);
+      transition: transform .3s ease;
+      background: #fff;
+    }
+    .pfp:hover { transform: translateY(6px) scale(1.02); }
+    h1 {
+      margin: 18px 0 6px;
+      font-size: 2rem;
+      line-height: 1.1;
+      letter-spacing: .5px;
+      font-weight: 800;
+      color: var(--cherry);
+      text-transform: uppercase;
+    }
+    .tagline {
+      margin: 0 0 12px;
+      color: #6b1111;
+      font-weight: 600;
+      opacity: .85;
+    }
+    .links {
+      display: grid;
+      gap: 14px;
+      padding: 22px;
+    }
+    .btn {
+      --r: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      background: var(--cherry);
+      color: var(--cream);
+      padding: 16px 18px;
+      border-radius: var(--r);
+      border: 1px solid var(--cherry-700);
+      box-shadow: 0 10px 20px rgba(154,0,2,0.25);
+      transition: transform .14s ease, box-shadow .2s ease, background .2s ease;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(154,0,2,0.32); background: var(--cherry-500); }
+    .btn:active { transform: translateY(0); }
+    .btn .icon { width: 26px; height: 26px; flex: 0 0 auto; fill: var(--cream); }
+    .btn .text { font-weight: 600; letter-spacing: .3px; }
+    .btn .meta { margin-left: auto; opacity: .9; font-weight: 600; }
+
+    .footer {
+      padding: 16px 22px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: #6b1111;
+    }
+    .copy { font-size: 12px; opacity: .8; }
+
+    /* Ripple effect */
+    .btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,.25), transparent 40%);
+      opacity: 0;
+      transition: opacity .3s ease;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .btn:hover::after { opacity: 1; }
+    .btn > * { position: relative; z-index: 1; }
+
+    /* Simple stagger animation */
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .links .btn { animation: floatIn .7s ease both; }
+    .links .btn:nth-child(1) { animation-delay: .05s; }
+    .links .btn:nth-child(2) { animation-delay: .1s; }
+    .links .btn:nth-child(3) { animation-delay: .15s; }
+    .links .btn:nth-child(4) { animation-delay: .2s; }
+    .links .btn:nth-child(5) { animation-delay: .25s; }
+    .links .btn:nth-child(6) { animation-delay: .3s; }
+
+    /* Floating decorative dots */
+    .bg-dot { position: absolute; border-radius: 50%; filter: blur(6px); opacity: .14; background: var(--cherry); animation: drift 16s ease-in-out infinite; }
+    .dot1 { width: 160px; height: 160px; left: -40px; top: -40px; }
+    .dot2 { width: 120px; height: 120px; right: -30px; top: 30%; animation-duration: 18s; }
+    .dot3 { width: 140px; height: 140px; left: 20px; bottom: -50px; animation-duration: 22s; }
+    @keyframes drift { 0%,100%{ transform: translateY(0) } 50% { transform: translateY(16px) } }
+
+    /* Responsive */
+    @media (min-width: 560px) {
+      .links { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
-  <main class="card" role="main">
-    <img class="avatar" src="https://placehold.co/200x200?text=Avatar" alt="Avatar">
-    <h1>Lord.milka</h1>
-    <p class="desc">Retrouvez-moi ici — cliquez sur un des liens pour accéder à mes réseaux.</p>
+  <div class="wrap">
+    <div class="bg-dot dot1"></div>
+    <div class="bg-dot dot2"></div>
+    <div class="bg-dot dot3"></div>
 
-    <div class="links">
-      <a class="link" href="https://instagram.com/TON_PSEUDO" target="_blank" rel="noopener">Instagram</a>
-      <a class="link" href="https://twitter.com/TON_PSEUDO" target="_blank" rel="noopener">X (Twitter)</a>
-      <a class="link" href="https://facebook.com/TON_PSEUDO" target="_blank" rel="noopener">Facebook</a>
-      <a class="link" href="https://youtube.com/TON_PSEUDO" target="_blank" rel="noopener">YouTube</a>
-      <a class="link" href="mailto:ton@email" target="_blank" rel="noopener">Email</a>
-      <!-- Ajoute/supprime des lignes ci-dessous selon tes besoins -->
-    </div>
-
-    <div class="small">
-      <div class="icons">
-        <!-- petites icônes optionnelles — remplace ou supprime -->
-        <span>🌐</span>
-        <span>🔗</span>
+    <div class="card">
+      <div class="hero">
+        <img class="pfp" src="https://th.bing.com/th/id/R.1da4efb817ba0e243ebf4f33614e0466?rik=hYpVV%2bLwXGUfqA&pid=ImgRaw&r=0" alt="Photo de profil" />
+        <h1>MILKA</h1>
+        <p class="tagline">Tous mes réseaux au même endroit</p>
       </div>
-      <div style="margin-top:8px">Partage : https://tondomaineougithubpage.example</div>
+
+      <div class="links" id="links">
+        <a class="btn" href="https://www.instagram.com/izweehdb/" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.75a1.25 1.25 0 1 1-1.25 1.25A1.25 1.25 0 0 1 18 6.75z"/></svg>
+          <span class="text">Instagram</span>
+          <span class="meta">@izweehdb</span>
+        </a>
+        <a class="btn" href="https://www.instagram.com/mlk_hdb/" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.75a1.25 1.25 0 1 1-1.25 1.25A1.25 1.25 0 0 1 18 6.75z"/></svg>
+          <span class="text">Instagram</span>
+          <span class="meta">@mlk_hdb</span>
+        </a>
+        <a class="btn" href="https://snapchat.com/t/HvAVfYud" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c3 0 5 2.3 5 5.2 0 1-.2 1.8-.5 2.5.6.4 1.3.8 2 .9.4.1.6.6.4 1-.4.7-1.5 1.1-2.4 1.3.1.4.2.8.2 1.1 0 1.1-.5 2.1-1.2 2.9-.3.3-.7.5-1.1.6-1 .3-2.6.5-2.4 1.8.1.5-.3 1-1 1s-1.1-.5-1-1c.2-1.3-1.4-1.5-2.4-1.8-.4-.1-.8-.3-1.1-.6C7.3 17.1 6.8 16.1 6.8 15c0-.4.1-.8.2-1.1-.9-.2-2-.6-2.4-1.3-.2-.4 0-.9.4-1 0 0 1.4-.3 2.1-.9-.4-.7-.5-1.5-.5-2.5C6.6 4.3 9 2 12 2z"/></svg>
+          <span class="text">Snapchat</span>
+          <span class="meta">@lil_milka</span>
+        </a>
+        <a class="btn" href="https://www.tiktok.com/@lil_milkacrz" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 3a5.5 5.5 0 0 0 .2 1.4 5.6 5.6 0 0 0 3.8 3.7 6.8 6.8 0 0 0 1.5.2v3a9.4 9.4 0 0 1-5.2-1.8v6.8A6.3 6.3 0 1 1 10.3 9h3A3.3 3.3 0 1 0 13 15.3V3z"/></svg>
+          <span class="text">TikTok</span>
+          <span class="meta">@lil_milkacrz</span>
+        </a>
+        <a class="btn" href="https://discord.gg/GcYraPd7" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7.7a16.6 16.6 0 0 0-3.9-1.2l-.2.5a14.4 14.4 0 0 1 3.4 1.1A16.2 16.2 0 0 0 15 6l-.2.4a15.3 15.3 0 0 0-5.6 0L9 6a16.2 16.2 0 0 0-4.3 2.1 16 16 0 0 1 3.4-1.1l-.2-.5A16.6 16.6 0 0 0 4 7.7C2.3 11.2 2 14.6 2 14.6a12.5 12.5 0 0 0 7 3.6l.9-1.2a7.2 7.2 0 0 1-4.2-2.2 9 9 0 0 0 4.3 1.3h2a9 9 0 0 0 4.3-1.3 7.2 7.2 0 0 1-4.2 2.2l.9 1.2a12.5 12.5 0 0 0 7-3.6s-.3-3.4-2-6.9zM9.7 13.6c-.6 0-1.2-.7-1.2-1.6s.5-1.6 1.2-1.6 1.2.7 1.2 1.6-.5 1.6-1.2 1.6zm4.6 0c-.7 0-1.2-.7-1.2-1.6s.5-1.6 1.2-1.6 1.2.7 1.2 1.6-.6 1.6-1.2 1.6z"/></svg>
+          <span class="text">Discord</span>
+          <span class="meta">Invitation</span>
+        </a>
+        <a class="btn" href="https://mhaagency.fr/i" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 2a8 8 0 0 1 2 .3 19.7 19.7 0 0 0-2 5.2A19.7 19.7 0 0 0 10 4.3 8 8 0 0 1 12 4zm-3 1a18 18 0 0 1 3.1 6H5.2A8 8 0 0 1 9 5zM4.1 13h7a20 20 0 0 1-2.8 6A8 8 0 0 1 4.1 13zM12 20a8 8 0 0 1-2-.3 19.7 19.7 0 0 0 2-5.2 19.7 19.7 0 0 0 2 5.2 8 8 0 0 1-2 .3zm3-.7A18 18 0 0 1 11.9 13h7a8 8 0 0 1-3.9 6.3zM17.9 11h-7A18 18 0 0 1 13 5a8 8 0 0 1 4.9 6z"/></svg>
+          <span class="text">Agence</span>
+          <span class="meta">mha agency</span>
+        </a>
+      </div>
+
+      <div class="footer">
+        <div class="copy">© <span id="y"></span> MILKA</div>
+        <div class="copy">Palette: Cherry Cola #9A0002 · Cream Vanilla #EFE6DE</div>
+      </div>
     </div>
-  </main>
+
+    <!-- Musique YouTube: lecture auto muet + boucle -->
+    <iframe title="Musique" width="0" height="0" style="position: absolute; opacity:0; pointer-events:none;" src="https://www.youtube.com/embed/9Vipv-DZXx4?autoplay=1&mute=1&loop=1&playlist=9Vipv-DZXx4&controls=0&modestbranding=1" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+
+  <script>
+    // Année dynamique
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Ripple position (effet lumineux dirigé)
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('pointermove', e => {
+        const rect = btn.getBoundingClientRect();
+        btn.style.setProperty('--x', (e.clientX - rect.left) + 'px');
+        btn.style.setProperty('--y', (e.clientY - rect.top) + 'px');
+      });
+    });
+  </script>
 </body>
 </html>
