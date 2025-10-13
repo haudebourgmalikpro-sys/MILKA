@@ -157,6 +157,24 @@
     @media (min-width: 560px) {
       .links { grid-template-columns: 1fr 1fr; }
     }
+    .music-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--cherry);
+      color: var(--cream);
+      border: 1px solid var(--cherry-700);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(154,0,2,0.25);
+      transition: transform .12s ease, box-shadow .2s ease, background .2s ease;
+      z-index: 10;
+    }
+    .music-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(154,0,2,0.32); }
+    .music-btn:active { transform: translateY(0); }
   </style>
 </head>
 <body>
@@ -212,14 +230,13 @@
     </div>
 
     <!-- Musique YouTube: lecture auto muet + boucle -->
-    <iframe title="Musique" width="0" height="0" style="position: absolute; opacity:0; pointer-events:none;" src="https://www.youtube.com/embed/9Vipv-DZXx4?autoplay=1&mute=1&loop=1&playlist=9Vipv-DZXx4&controls=0&modestbranding=1" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <iframe id="ytbg" title="Musique" width="0" height="0" style="position: absolute; opacity:0; pointer-events:none;" src="https://www.youtube.com/embed/9Vipv-DZXx4?autoplay=0&mute=1&loop=1&playlist=9Vipv-DZXx4&controls=0&modestbranding=1" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <button id="musicBtn" class="music-btn" type="button" aria-pressed="false" aria-label="Activer la musique">Musique: Off</button>
   </div>
 
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    // Année dynamique
     document.getElementById('y').textContent = new Date().getFullYear();
-
-    // Ripple position (effet lumineux dirigé)
     document.querySelectorAll('.btn').forEach(btn => {
       btn.addEventListener('pointermove', e => {
         const rect = btn.getBoundingClientRect();
@@ -227,7 +244,31 @@
         btn.style.setProperty('--y', (e.clientY - rect.top) + 'px');
       });
     });
+
+    let player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('ytbg', {
+        events: {
+          'onReady': () => {
+            const btn = document.getElementById('musicBtn');
+            btn.addEventListener('click', () => {
+              if (!player) return;
+              const state = player.getPlayerState();
+              if (state === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+                btn.textContent = 'Musique: Off';
+                btn.setAttribute('aria-pressed', 'false');
+              } else {
+                player.mute();
+                player.playVideo();
+                btn.textContent = 'Musique: On';
+                btn.setAttribute('aria-pressed', 'true');
+              }
+            });
+          }
+        }
+      });
+    }
   </script>
 </body>
 </html>
-
