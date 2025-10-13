@@ -229,12 +229,13 @@
       </div>
     </div>
 
-    <!-- Musique YouTube: lecture auto muet + boucle -->
-    <iframe id="ytbg" title="Musique" width="1" height="1" style="position: absolute; opacity:0; pointer-events:none;" src="https://www.youtube.com/embed/9Vipv-DZXx4?autoplay=0&mute=1&loop=1&playlist=9Vipv-DZXx4&controls=0&modestbranding=1&playsinline=1&enablejsapi=1" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-    <button id="musicBtn" class="music-btn" type="button" aria-pressed="false" aria-label="Activer la musique">Musique: Off</button>
+    <!-- Musique locale (HTML5 Audio) -->
+    <audio id="bgAudio" preload="none" loop>
+      <source src="./Theodora - Fashion designa (Slowed + Reverb).mp3" type="audio/mpeg" />
+    </audio>
+    <button id="musicBtn" class="music-btn" type="button" aria-pressed="false" aria-label="Lire la musique">Musique: Off</button>
   </div>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
     document.querySelectorAll('.btn').forEach(btn => {
@@ -245,68 +246,32 @@
       });
     });
 
-    let player; let ytReady = false; let pendingPlay = false;
     const musicBtn = document.getElementById('musicBtn');
-    const ytIframe = document.getElementById('ytbg');
-    musicBtn.addEventListener('click', () => {
-      if (!ytReady || !player) {
-        pendingPlay = true;
-        try {
-          const url = new URL(ytIframe.src);
-          url.searchParams.set('autoplay', '1');
-          url.searchParams.set('mute', '0');
-          url.searchParams.set('origin', window.location.origin);
-          ytIframe.src = url.toString();
-        } catch(e) {}
-        musicBtn.textContent = 'Musique: On (chargement)';
-        musicBtn.setAttribute('aria-pressed', 'true');
-        return;
-      }
-      const state = player.getPlayerState();
-      if (state === YT.PlayerState.PLAYING) {
-        player.pauseVideo();
-        musicBtn.textContent = 'Musique: Off';
-        musicBtn.setAttribute('aria-pressed', 'false');
-      } else {
-        try { player.unMute(); } catch(e) {}
-        try { player.setVolume(60); } catch(e) {}
-        player.playVideo();
-        musicBtn.textContent = 'Musique: On';
-        musicBtn.setAttribute('aria-pressed', 'true');
-      }
+    const audio = document.getElementById('bgAudio');
+
+    audio.addEventListener('error', () => {
+      musicBtn.textContent = 'Erreur audio';
     });
 
-    let userRequestedPlay = false;
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('ytbg', {
-        playerVars: {
-          playsinline: 1,
-          loop: 1,
-          playlist: '9Vipv-DZXx4',
-          origin: window.location.origin
-        },
-        events: {
-          'onReady': () => {
-            ytReady = true;
-            if (pendingPlay) {
-              try { player.mute(); } catch(e) {}
-              userRequestedPlay = true;
-              player.playVideo();
-              musicBtn.textContent = 'Musique: On';
-              musicBtn.setAttribute('aria-pressed', 'true');
-              pendingPlay = false;
-            }
-          },
-          'onStateChange': (ev) => {
-            if (ev.data === YT.PlayerState.PLAYING && userRequestedPlay) {
-              try { player.unMute(); } catch(e) {}
-              try { player.setVolume(60); } catch(e) {}
-              userRequestedPlay = false;
-            }
-          }
-        }
-      });
+    function setBtn(stateOn) {
+      musicBtn.textContent = stateOn ? 'Musique: On' : 'Musique: Off';
+      musicBtn.setAttribute('aria-pressed', stateOn ? 'true' : 'false');
     }
+
+    musicBtn.addEventListener('click', async () => {
+      try {
+        if (audio.paused) {
+          audio.volume = 0.6;
+          await audio.play();
+          setBtn(true);
+        } else {
+          audio.pause();
+          setBtn(false);
+        }
+      } catch (e) {
+        musicBtn.textContent = 'Cliquer pour lire';
+      }
+    });
   </script>
 </body>
 </html>
